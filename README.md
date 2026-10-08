@@ -418,13 +418,14 @@ Method kedua menerima dua parameter, yaitu `idDonasi` dan objek `Penyaluran`. Me
 
 Ini penting karena saat data penyaluran diperbarui, jumlah porsi yang sudah tercatat sebelumnya tidak boleh dihitung lagi sebagai penyaluran tambahan. Dengan mengecualikan objek yang sedang diperbarui, sistem dapat menghitung total porsi penyaluran dari data lain terlebih dahulu, lalu membandingkannya dengan jumlah porsi baru yang akan dimasukkan. Contohnya, jika sebuah donasi memiliki 20 porsi dan sebelumnya sudah ada penyaluran 10 porsi, lalu data penyaluran tersebut ingin diubah menjadi 15 porsi, maka 10 porsi dari data yang diperbarui tidak perlu dihitung lagi. Sistem hanya menghitung penyaluran lainnya, lalu menambahkan 15 porsi baru agar totalnya tetap sesuai batas donasi.
 
-Kedua method ini saling berkaitan, tetapi dipakai dalam situasi yang berbeda. Method pertama untuk menghitung semua penyaluran, sedangkan method kedua dipakai saat memperbarui data dengan mengecualikan objek yang sedang diperbarui. 
-
 ```
 private int totalPorsiPenyaluran(String idDonasi, Penyaluran penyaluran) {
   ..
 }
 ```
+
+Kedua method ini saling berkaitan, tetapi dipakai dalam situasi yang berbeda. Method pertama untuk menghitung semua penyaluran, sedangkan method kedua dipakai saat memperbarui data dengan mengecualikan objek yang sedang diperbarui. 
+
 ---
 ## 😶‍🌫️ Abstraction
 Abstraction diterapkan dengan menggunakan **abstract class** dan **abstract method** pada hierarki class `Donatur` dan `Penerima`. Penerapan ini digunakan untuk membuat struktur umum sebuah objek tanpa harus menentukan semua detail implementasinya di superclass.
@@ -541,7 +542,9 @@ Program Food Redistribution System dibuat untuk mengelola proses redistribusi ma
 
 
 <br> **4. Menu Data Donatur**
-<br> Menu Donatur digunakan oleh Admin untuk mencatat dan mengelola pihak yang memberikan makanan atau donasi. Data yang disimpan meliputi `ID Donatur`, `nama donatur`, dan `jenis donatur`. Program membedakan donatur menjadi `Donatur Individu` dan `Donatur Instansi`. ID Donatur akan otomatis dibuat oleh sistem setiap kali data donatur baru ditambahkan. Dengan cara ini, pengguna tidak perlu mengisi ID secara manual, sehingga proses penambahan data lebih mudah dan konsisten. Donatur Individu memiliki atribut tambahan `Jenis Kegiatan`, sedangkan Donatur Instansi memiliki atribut tambahan berupa `Nama Instansi` dan `Jenis Instansi`. Perbedaan ini diterapkan dengan _inheritance_, sehingga kedua class turunan tetap memiliki data dasar dari class Donatur, tapi juga bisa punya karakteristik tambahan. Dengan cara ini, sistem bisa menyimpan berbagai jenis donatur dalam satu `ArrayList<Donatur>` tanpa perlu mekanisme penyimpanan terpisah. 
+<br> Menu Donatur digunakan oleh Admin untuk mencatat dan mengelola pihak yang memberikan makanan atau donasi. Data yang disimpan meliputi `ID Donatur`, `nama donatur`, dan `jenis donatur`. ID Donatur akan otomatis dibuat oleh sistem setiap kali data donatur baru ditambahkan. Dengan cara ini, pengguna tidak perlu mengisi ID secara manual, sehingga proses penambahan data lebih mudah dan konsisten. 
+
+Program membedakan donatur menjadi `Donatur Individu` dan `Donatur Instansi`. Donatur Individu memiliki atribut tambahan `Jenis Kegiatan`, sedangkan Donatur Instansi memiliki atribut tambahan berupa `Nama Instansi` dan `Jenis Instansi`. Perbedaan ini diterapkan dengan _inheritance_, sehingga kedua class turunan tetap memiliki data dasar dari class Donatur, tapi juga bisa punya karakteristik tambahan. Dengan cara ini, sistem bisa menyimpan berbagai jenis donatur dalam satu `ArrayList<Donatur>` tanpa perlu mekanisme penyimpanan terpisah. 
 
 <img width="458" height="855" alt="image" src="https://github.com/user-attachments/assets/c65af571-4ccb-4640-aba8-48017a081cb7" />
 
@@ -555,45 +558,46 @@ Program Food Redistribution System dibuat untuk mengelola proses redistribusi ma
 
 <br> **6. Menu Data Donasi**
 <br> Menu Donasi digunakan untuk mencatat makanan yang diberikan oleh donatur. Setiap data donasi berisi `ID Donasi`, `ID Donatur`, `Nama Makanan,` `Jumlah Porsi`, dan `Status Kelayakan`. ID Donasi akan dibuat secara otomatis setiap kali data donasi ditambahkan. Saat Admin menambah atau memperbarui data donasi, sistem akan mencari ID Donatur lewat DonaturService. Jika ID belum terdaftar, pengguna diminta memasukkan ID Donatur yang valid. Dengan cara ini, data donasi tidak bisa sembarangan mengacu pada donatur yang tidak ada di sistem. 
-<br> Admin bisa melakukan CRUD pada data donasi, sedangkan Petugas hanya bisa melihat data ini sebagai informasi pendukung dalam proses penyaluran. Pada proses pengelolaan data, status kelayakan donasi bisa ditentukan saat proses penambahan dan juga _update_ data donasi. Status kelayakan ini digunakan untuk menentukan apakah makanan yang didonasikan memenuhi kondisi untuk diproses lebih lanjut dalam sistem redistribusi.
+
+Pada proses pengelolaan data, status kelayakan donasi bisa ditentukan saat proses penambahan dan juga _update_ data donasi. Status kelayakan ini digunakan untuk menentukan apakah makanan yang didonasikan memenuhi kondisi untuk diproses lebih lanjut dalam sistem redistribusi.
 
 <img width="455" height="882" alt="image" src="https://github.com/user-attachments/assets/a301327a-8d1f-48f9-8275-82eeff918395" />
 
 
 <br> **7. Menu Data Penerima**
-<br> Menu Penerima digunakan untuk mengelola pihak yang akan menerima makanan hasil redistribusi. Seperti Donatur, penerima dibedakan menjadi dua jenis, yaitu `Penerima Individu` dan `Penerima Lembaga`. Penerima Individu memiliki atribut tambahan `Deskripsi Penerima`, sedangkan Penerima Lembaga memiliki informasi seperti `Nama Lembaga`, `Jenis Lembaga`, dan `Nama Pengelola`. Kedua jenis ini adalah turunan dari class Penerima, sehingga bisa disimpan dalam satu ArrayList<Penerima>. Ketika Admin menambah data, ID Penerima akan dibuat secara otomatis oleh sistem ketika data penerima baru ditambahkan. Pengguna tidak perlu memasukkan ID secara manual, sehingga setiap penerima langsung memiliki identitas dari sistem. Informasi yang tersimpan akan menyesuaikan dengan jenis penerima yang di pilih, apakah Penerima Individu atau Penerima Lembaga. Admin bisa mengelola data penerima sepenuhnya, sedangkan Petugas hanya melihatnya untuk mengetahui siapa yang akan menerima makanan.
+<br> Menu Penerima digunakan untuk mengelola pihak yang akan menerima makanan hasil redistribusi. Ketika Admin menambah data, ID Penerima akan dibuat secara otomatis oleh sistem ketika data penerima baru ditambahkan. Pengguna tidak perlu memasukkan ID secara manual, sehingga setiap penerima langsung memiliki identitas dari sistem. Seperti Donatur, penerima dibedakan menjadi dua jenis, yaitu `Penerima Individu` dan `Penerima Lembaga`. Penerima Individu memiliki atribut tambahan `Deskripsi Penerima`, sedangkan Penerima Lembaga memiliki informasi seperti `Nama Lembaga`, `Jenis Lembaga`, dan `Nama Pengelola`. Kedua jenis ini adalah turunan dari class Penerima, sehingga bisa disimpan dalam satu `ArrayList<Penerima>`. 
 
 <img width="525" height="822" alt="image" src="https://github.com/user-attachments/assets/69ff2a6a-9a82-4200-8ff8-4f2ac9c4fc9c" />
 
 
 <br> **8. Menu Data Penyaluran**
-<br> Menu Penyaluran menghubungkan data donasi dengan data penerima dalam kegiatan redistribusi makanan. Setiap data penyaluran berisi `ID Penyaluran`, `ID Donasi`, `ID Penerima`, `Nama Kegiatan`, `Tanggal Penyaluran`, `Status Penyaluran`, `Jumlah Porsi`, dan `Petugas`. Saat data penyaluran ditambahkan, sistem akan otomatis membuat ID Penyaluran. Pengguna tidak perlu memasukkan ID secara manual, sehingga setiap data penyaluran memiliki identitas yang dihasilkan oleh sistem. Ketika Admin membuat data penyaluran, sistem terlebih dahulu memastikan bahwa ID Donasi dan ID Penerima sudah ada di sistem. Jadi, penyaluran tidak bisa dibuat jika donasi atau penerima belum terdaftar. Setelah data berhasil dibuat, status penyaluran otomatis menjadi `Belum Disalurkan`, artinya data sudah dibuat dan direncanakan, tapi penyaluran belum selesai. Pembuatan data penyaluran tidak berarti makanan sudah diberikan. Setelah kegiatan berjalan, Petugas bisa memperbarui status penyaluran sesuai kondisi. Status ini digunakan untuk menggambarkan perkembangan kegiatan, mulai dari belum disalurkan, dalam proses, hingga sudah disalurkan.
+<br> Menu Penyaluran menghubungkan data donasi dengan data penerima dalam kegiatan redistribusi makanan. Setiap data penyaluran berisi `ID Penyaluran`, `ID Donasi`, `ID Penerima`, `Nama Kegiatan`, `Tanggal Penyaluran`, `Status Penyaluran`, `Jumlah Porsi`, dan `Petugas`. Saat data penyaluran ditambahkan, sistem akan otomatis membuat ID Penyaluran. Pengguna tidak perlu memasukkan ID secara manual, sehingga setiap data penyaluran memiliki identitas yang dihasilkan oleh sistem. Ketika Admin membuat data penyaluran, sistem terlebih dahulu memastikan bahwa ID Donasi dan ID Penerima sudah ada di sistem. Jadi, penyaluran tidak bisa dibuat jika donasi atau penerima belum tersedia. Setelah data berhasil dibuat, status penyaluran otomatis menjadi `Belum Disalurkan`, artinya data sudah dibuat dan direncanakan, tapi penyaluran belum selesai. Pembuatan data penyaluran tidak berarti makanan sudah diberikan. Setelah kegiatan berjalan, Petugas bisa memperbarui status penyaluran sesuai kondisi. Status ini digunakan untuk menggambarkan perkembangan kegiatan, mulai dari belum disalurkan, dalam proses, hingga sudah disalurkan.
 
 <img width="375" height="877" alt="image" src="https://github.com/user-attachments/assets/25d2ddea-2bf1-42f5-8027-771618fe776c" />
 
 
 <br> **9. Proses Update Data**
-<br> Proses Update digunakan saat Admin ingin mengubah informasi yang sudah tersimpan. Admin terlebih dahulu memasukkan ID dari data yang ingin diperbarui, lalu program mencari data tersebut lewat method pencarian di service. Jika data ditemukan, sistem menampilkan informasi yang akan diubah dan meminta konfirmasi Admin sebelum perubahan dilakukan. Jika Admin memilih `y`, sistem meminta data baru dan memasukkan perubahan ke objek terkait lewat setter. Jika Admin memilih selain `y`, perubahan dibatalkan. Konfirmasi sebelum update ini bertujuan mengurangi risiko perubahan tidak sengaja. Untuk data Penyaluran, Admin mengelola informasi kegiatan seperti donasi, penerima, nama kegiatan, tanggal, jumlah porsi, dan petugas. Perubahan status penyaluran hanya bisa dilakukan oleh Petugas.
+<br> Proses Update digunakan saat Admin ingin mengubah informasi yang sudah tersimpan. Admin terlebih dahulu memasukkan ID dari data yang ingin diperbarui, lalu program mencari data tersebut lewat method pencarian di service. Jika data ditemukan, sistem menampilkan informasi yang akan diubah dan meminta konfirmasi Admin sebelum perubahan dilakukan. Jika Admin memilih `y`, sistem meminta data baru dan memasukkan perubahan ke objek terkait. Jika Admin memilih selain `y`, perubahan dibatalkan. Konfirmasi sebelum update ini bertujuan mengurangi risiko perubahan tidak sengaja. 
 
 <img width="437" height="692" alt="image" src="https://github.com/user-attachments/assets/cbf2addc-fb2b-4fd9-9040-2e3d20a8f736" />
 <br> <img width="418" height="295" alt="image" src="https://github.com/user-attachments/assets/45f12736-0267-4717-a638-88e99a71481d" />
 
 
 <br> **10. Proses Update Status Penyaluran oleh Petugas**
-<br> Pada data Penyaluran, ada proses khusus yang hanya bisa dilakukan lewat Menu Petugas, yaitu `Update Status Penyaluran`. Saat Petugas memilih menu Lihat Data Penyaluran, program menampilkan semua data penyaluran beserta statusnya. Petugas bisa memilih fitur `Update Status` dan memasukkan ID Penyaluran yang ingin diubah. Program mencari data tersebut lewat PenyaluranService. Jika data ditemukan, sistem menampilkan ID Penyaluran, nama kegiatan, dan status saat ini sebelum meminta konfirmasi. Setelah Petugas mengonfirmasi, sistem meminta status penyaluran baru dan menyimpannya ke objek Penyaluran. Pembagian fungsi ini dibuat karena Admin bertanggung jawab membuat dan mengelola informasi kegiatan, sedangkan Petugas yang terlibat langsung dalam penyaluran berwenang mencatat perkembangan statusnya. Jadi, status penyaluran tidak hanya sebagai atribut, tapi juga menggambarkan perkembangan kegiatan di sistem.
+<br> Pada data Penyaluran, ada proses khusus yang hanya bisa dilakukan lewat Menu Petugas, yaitu `Update Status Penyaluran`. Saat Petugas memilih menu `Lihat Data Penyaluran`, program menampilkan semua data penyaluran beserta statusnya. Petugas bisa memilih fitur `Update Status` dan memasukkan ID Penyaluran yang ingin diubah. Program mencari data tersebut lewat PenyaluranService. Jika data ditemukan, sistem menampilkan ID Penyaluran, nama kegiatan, dan status saat ini sebelum meminta konfirmasi. Setelah Petugas mengonfirmasi, sistem meminta status penyaluran baru dan menyimpannya ke objek Penyaluran. Pembagian fungsi ini dibuat karena Admin bertanggung jawab membuat dan mengelola informasi kegiatan, sedangkan Petugas yang terlibat langsung dalam penyaluran berwenang mencatat perkembangan statusnya. Jadi, status penyaluran tidak hanya sebagai atribut, tapi juga menggambarkan perkembangan kegiatan di sistem.
 
 <img width="465" height="866" alt="image" src="https://github.com/user-attachments/assets/7bf1dd39-cc5d-4d3d-a049-ab5c1af3b577" />
 
 
 <br> **11. Proses Hapus Data**
-<br> Proses Hapus digunakan Admin saat data tidak lagi dibutuhkan di sistem. Admin memasukkan ID data yang ingin dihapus, lalu program mencari objek berdasarkan ID itu. Jika data ditemukan, program menampilkan detail data dan meminta konfirmasi dengan pertanyaan **Yakin ingin menghapus data? `(y/n)`**. Data hanya dihapus dari `ArrayList` jika Admin mengonfirmasi dengan `y`. Jika Admin memilih jawaban lain, proses dibatalkan dan data tetap ada. Mekanisme ini memberi lapisan konfirmasi sebelum data dihapus, sehingga pengguna bisa memastikan bahwa data yang dipilih memang merupakan data yang ingin dihapus.
+<br> Proses Hapus digunakan Admin saat data tidak lagi dibutuhkan di sistem. Admin memasukkan ID data yang ingin dihapus, lalu program mencari objek berdasarkan ID itu. Jika data ditemukan, program menampilkan detail data dan meminta konfirmasi, sehingga data hanya akan dihapus dari `ArrayList` jika Admin mengonfirmasi dengan `y`. Namun, jika Admin memilih jawaban lain, proses dibatalkan dan data tetap ada. Mekanisme ini memberi lapisan konfirmasi sebelum data dihapus, sehingga pengguna bisa memastikan bahwa data yang dipilih memang merupakan data yang ingin dihapus.
 
 <img width="423" height="792" alt="image" src="https://github.com/user-attachments/assets/1e05ca17-e942-448a-8994-ad6b07a5c845" />
 <br> <img width="412" height="288" alt="image" src="https://github.com/user-attachments/assets/b0a3294a-7586-433d-8a2f-2f0528a391e5" />
 
 
 <br> **12. Kembali dan Keluar dari Program**
-<br> Setiap menu di program memiliki pilihan Kembali agar pengguna bisa berpindah ke menu sebelumnya tanpa menutup program. Ketika Admin memilih Kembali, perulangan pada `menuAdmin()` berhenti dan kontrol kembali ke `MenuController`. Hal yang sama berlaku di Menu Petugas. Dengan mekanisme perulangan _while_ dan variabel penanda seperti `berjalan`, setiap menu bisa terus digunakan sampai pengguna memilih kembali. Setelah kembali ke Menu Utama, pengguna bisa memilih peran lain atau memilih Keluar. Jika memilih Keluar, perulangan utama di `MenuController` berhenti dan program menampilkan **pesan penutup**.
+<br> Setiap menu di program memiliki pilihan Kembali agar pengguna bisa berpindah ke menu sebelumnya tanpa menutup program. Ketika Admin memilih Kembali, perulangan pada `menuAdmin()` berhenti dan kontrol kembali ke `MenuController`. Hal yang sama berlaku di Menu Petugas. Setelah kembali ke Menu Utama, pengguna bisa memilih peran lain atau memilih Keluar. Jika memilih Keluar, perulangan utama di `MenuController` berhenti dan program menampilkan **pesan penutup**.
 
 <img width="455" height="586" alt="image" src="https://github.com/user-attachments/assets/3c1845af-7604-40e2-9dea-c252202ae540" />
 
